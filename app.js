@@ -19,10 +19,6 @@ app.use(cors());
 // parse requests of content-type - application/json
 app.use(bodyParser.json())
 
-// define a simple route
-app.get('/', (req, res) => {
-    res.json({"message": "Server Work"});
-});
 
 // Configuring the database
 const dbConfig = require('./apps/config/db.config.js');

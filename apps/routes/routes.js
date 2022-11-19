@@ -2,6 +2,11 @@ module.exports = (app) => {
     const users = require('../controllers/user.controller.js');
     const profiles = require('../controllers/profile.controller.js');
 
+    // define a simple route
+    app.get('/', (req, res) => {
+        res.json({ "message": "Server Work" });
+    });
+
     app.post('/users', users.create);
     app.post('/users/login', users.onLogin);
     app.get('/users', users.findAll);
