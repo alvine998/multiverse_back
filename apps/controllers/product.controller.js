@@ -1,0 +1,74 @@
+const Products = require('../models/product.model.js');
+
+exports.list = async (req, res) => {
+    var query = {}
+    if (req.query.status) {
+        query.status = req.query.status
+    }
+    try {
+        const result = await Products.find({$or:[{deleted: 0}, {status: req.query.status}]})
+        if (!result) {
+            return res.status(404).send('Gagal mendapatkan data')
+        }
+        return res.status(200).send(result)
+    } catch (error) {
+        res.status(500).send({
+            message: error.message || "Some error occurred while retrieving notes."
+        });
+    }
+}
+
+exports.create = async (req, res) => {
+    const payload = {
+        name: req.body.name,
+        category_id: req.body.category_id,
+        category_name: req.body.category_name,
+        description: req.body.description,
+        price: req.body.price || 0,
+        stock: req.body.stock || 0,
+        status: req.body.status || 0,
+        deleted: req.body.deleted || 0
+    }
+
+    try {
+        const result = await Products.create(payload)
+        if (!result) {
+            return res.status(404).send('Gagal menambahkan data')
+        }
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send('Server Internal Error : ' + error)
+    }
+}
+
+exports.update = async (req, res) => {
+    try {
+        const result = await Products.findByIdAndUpdate(req.query.id, req.body, { new: true })
+        if (!result) {
+            return res.status(404).send({
+                message: "users not found with id " + req.query.id
+            });
+        }
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send({
+            message: "Error updating users with id " + req.query.id + ` : ${error}`
+        });
+    }
+}
+
+exports.delete = async (req, res) => {
+    try {
+        const result = await Products.findByIdAndUpdate(req.query.id, {deleted: 1}, { new: true })
+        if (!result) {
+            return res.status(404).send({
+                message: "users not found with id " + req.query.id
+            });
+        }
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(500).send({
+            message: "Error updating users with id " + req.query.id + ` : ${error}`
+        });
+    }
+}

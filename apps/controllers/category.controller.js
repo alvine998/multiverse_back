@@ -1,4 +1,4 @@
-const Profiles = require('../models/profile.model.js');
+const Categories = require('../models/category.model.js');
 
 exports.list = async (req, res) => {
     var query = {}
@@ -6,7 +6,7 @@ exports.list = async (req, res) => {
         query.status = req.query.status
     }
     try {
-        const result = await Profiles.find({$or:[{deleted: 0}, {status: req.query.status}]})
+        const result = await Categories.find({ $or: [{ deleted: 0 }, { status: req.query.status }] })
         if (!result) {
             return res.status(404).send('Gagal mendapatkan data')
         }
@@ -21,20 +21,12 @@ exports.list = async (req, res) => {
 exports.create = async (req, res) => {
     const payload = {
         name: req.body.name,
-        address: req.body.address,
-        phone: req.body.phone,
-        email: req.body.email,
-        lat: req.body.lat,
-        long: req.body.long,
-        vision: req.body.vision || null,
-        mission: req.body.mission || null,
-        logo: req.body.logo || null,
         status: req.body.status || 0,
-        deleted: req.body.deleted || 0,
+        deleted: req.body.deleted || 0
     }
 
     try {
-        const result = await Profiles.create(payload)
+        const result = await Categories.create(payload)
         if (!result) {
             return res.status(404).send('Gagal menambahkan data')
         }
@@ -46,7 +38,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const result = await Profiles.findByIdAndUpdate(req.query.id, req.body, { new: true })
+        const result = await Categories.findByIdAndUpdate(req.query.id, req.body, { new: true })
         if (!result) {
             return res.status(404).send({
                 message: "users not found with id " + req.query.id
@@ -62,7 +54,7 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const result = await Profiles.findByIdAndUpdate(req.query.id, {deleted: 1}, { new: true })
+        const result = await Categories.findByIdAndUpdate(req.query.id, { deleted: 1 }, { new: true })
         if (!result) {
             return res.status(404).send({
                 message: "users not found with id " + req.query.id
