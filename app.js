@@ -45,7 +45,7 @@ const dirname = path.resolve();
 app.use("/resources/uploads/", express.static(path.join(dirname, "/resources/uploads/")));
 
 // listen for requests
-const server = app.listen(process.env.PORT || 4002, () => {
+const server = app.listen(4002, () => {
     const port = server.address().port;
     console.log(`express is working on port ${port}`);
 })
